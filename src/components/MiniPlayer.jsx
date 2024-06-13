@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import playingImg from '../assets/yashodara.jpeg'
 import PlayerContext from './PlayerContext';
 
 
@@ -29,7 +28,7 @@ export default function MiniPlayer() {
         newWidth = (newWidth < 0) ? 0 : ((newWidth > 60) ? 60 : newWidth); 
         setSound(newWidth);
         audioRef.current.volume = newWidth/60;
-        if(newWidth == 0) handleMute();
+        if(newWidth === 0) handleMute();
         if(newWidth>0) handleUnmute();
     }
 
@@ -44,10 +43,10 @@ export default function MiniPlayer() {
     }
 
     const changeSlider = (e) => {
+        let fullWidth = slider.current.clientWidth;
         let newWidth = e.clientX - slider.current.offsetLeft;
-        newWidth = (newWidth < 0) ? 0 : ((newWidth > 300) ? 300 : newWidth); 
-        setProgressWidth(newWidth);
-        let newTime = audioRef.current.duration*(newWidth/300);
+        newWidth = (newWidth < 0) ? 0 : ((newWidth > fullWidth) ? fullWidth : newWidth); 
+        let newTime = audioRef.current.duration * (newWidth/fullWidth);
         audioRef.current.currentTime = newTime;
     }
 
@@ -77,6 +76,7 @@ export default function MiniPlayer() {
 
     useEffect(() =>{
         const audio = audioRef.current;
+        playerState.setPlayerRef(audioRef);
 
         setSound(audio.volume * 60);
 
@@ -85,7 +85,7 @@ export default function MiniPlayer() {
                 minute: Math.floor(audio.currentTime/60),
                 seconds: Math.floor(audio.currentTime%60)
             });
-            setProgressWidth(Math.floor(300*(audio.currentTime/ audio.duration)));
+            setProgressWidth((100*(audio.currentTime/ audio.duration)));
         };
 
         const updateEndTime = () => {
@@ -102,24 +102,26 @@ export default function MiniPlayer() {
             audio.removeEventListener('timeupdate',updateStartTime);
             audio.removeEventListener('loadedmetadata',updateEndTime);
         };
-    },[audioRef]);
+    },[playerState,audioRef]);
 
   return (
-    <div className='w-full h-full bg-gray-900 flex flex-row justify-between items-center px-2'>
+    <div className='w-full h-full bg-gray-900 flex flex-row justify-between items-center px-4 sm:px-2'>
         <div className='flex flex-row items-center gap-5'>
-            <img className='h-[60px] w-[60px] rounded-md' src={playingImg} alt='playing song' />
-            <div>
-                <h1 className=' text-sm text-gray-300 font-extralight'>Yashodara</h1>
-                <h2 className=' text-sm text-gray-500 font-extralight'>Gangadara</h2>
+            <img className='h-[60px] w-[60px] rounded-md' src={playerState.playingSong.img} alt='playing song' />
+            <div className=' min-w-[200px] flex flex-row items-center gap-5'>
+                <div>
+                    <h1 className=' text-sm text-gray-300 font-extralight'>{playerState.playingSong.name}</h1>
+                    <h2 className=' text-sm text-gray-500 font-extralight'>{playerState.playingSong.author}</h2>
+                </div>
+                <button className=''>
+                    add
+                </button>
             </div>
-            <button>
-                add
-            </button>
         </div>
 
-        <div className='flex flex-col items-center justify-center gap-2'>
+        <div className='flex-1 flex flex-col items-end pr-1 sm:pr-0 sm:items-center justify-center gap-2'>
             <div className='flex flex-row items-center justify-center gap-5'>
-                <button>
+                <button className=' hidden sm:block'>
                     <svg className='w-4 h-4' aria-hidden="true">
                         <path className=' fill-white' d="M3.3 1a.7.7 0 0 1 .7.7v5.15l9.95-5.744a.7.7 0 0 1 1.05.606v12.575a.7.7 0 0 1-1.05.607L4 9.149V14.3a.7.7 0 0 1-.7.7H1.7a.7.7 0 0 1-.7-.7V1.7a.7.7 0 0 1 .7-.7h1.6z"></path>
                     </svg>
@@ -134,23 +136,23 @@ export default function MiniPlayer() {
                         <path className=' fill-gray-800' d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713z"></path>
                     </svg>
                 </button>
-                <button>
+                <button className=' hidden sm:block'>
                     <svg className='w-4 h-4' aria-hidden="true">
                         <path className=' fill-white' d="M12.7 1a.7.7 0 0 0-.7.7v5.15L2.05 1.107A.7.7 0 0 0 1 1.712v12.575a.7.7 0 0 0 1.05.607L12 9.149V14.3a.7.7 0 0 0 .7.7h1.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-1.6z"></path>
                     </svg>
                 </button>
             </div>
-            <div className='flex flex-row items-center gap-2'>
-                <div className=' text-[10px] text-gray-500'>{startTime.minute + ':' + startTime.seconds}</div>
-                <div className='w-[300px] h-1 bg-gray-500 flex flex-row justify-start items-center cursor-pointer' onClick={changeSlider}>
-                    <div className='h-1 bg-gray-100' style={{'width': `${progressWidth}px`}} ref={slider}></div>
+            <div className='hidden w-full justify-center sm:flex flex-row items-center gap-2'>
+                <div className=' w-[20px] shrink-0 text-[10px] text-gray-500'>{startTime.minute + ':' + startTime.seconds}</div>
+                <div className=' w-[70%] shrink-0 h-1 bg-gray-500 flex flex-row justify-start items-center cursor-pointer' ref={slider} onClick={changeSlider}>
+                    <div className='h-1 bg-gray-100' style={{'width': `${progressWidth}%`}} ></div>
                     <div className='w-2 h-2 bg-gray-100 rounded-lg -ml-1 cursor-pointer' onMouseDown={startChangeSlider}></div>
                 </div>
-                <div className=' text-[10px] text-gray-500'>{endTime.minute + ':' + endTime.seconds}</div>
+                <div className=' w-20px shrink-0 text-[10px] text-gray-500'>{endTime.minute + ':' + endTime.seconds}</div>
             </div>
         </div>
 
-        <div className='flex flex-row items-center gap-5'>
+        <div className=' flex-row items-center gap-5 hidden sm:flex'>
             <button>
                 <svg className='w-4 h-4' aria-hidden="true">
                     <path className=' fill-white' d="M15 15H1v-1.5h14V15zm0-4.5H1V9h14v1.5zm-14-7A2.5 2.5 0 0 1 3.5 1h9a2.5 2.5 0 0 1 0 5h-9A2.5 2.5 0 0 1 1 3.5zm2.5-1a1 1 0 0 0 0 2h9a1 1 0 1 0 0-2h-9z"></path>
@@ -179,7 +181,7 @@ export default function MiniPlayer() {
             </button>
         </div>
         
-        <audio ref={audioRef} src={playerState.playingSong} typeof='audio/mp3' />
+        <audio ref={audioRef} src={playerState.playingSong.song} typeof='audio/mp3' />
     </div>
   )
 }

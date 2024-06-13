@@ -3,20 +3,24 @@ import MiniPlayer from './components/MiniPlayer'
 import SideBar from './components/SideBar'
 import { Outlet } from 'react-router-dom'
 import PlayerContext from './components/PlayerContext'
-import initialSong from './assets/yashodara.mp3'
+import DisplayData from './assets/DisplayData'
 
 
 export default function App() {
-  const [playingSong,setPlayingSong] = useState(initialSong);
+  const [playingSong,setPlayingSong] = useState(DisplayData.data[0].items[1]);
   const [playing, setPlaying] = useState(false);
-
-  const changeSong = (nextSong) => setPlayingSong(require(nextSong));
+  const [playerRef, setPlayerRef] = useState(null);
+  const [isMenu, setIsMenu] = useState(false);
 
   const playerState = {
     playingSong,
-    changeSong,
+    setPlayingSong,
     playing,
     setPlaying,
+    isMenu,
+    setIsMenu,
+    playerRef,
+    setPlayerRef
   };
 
   return (
@@ -24,7 +28,7 @@ export default function App() {
 
       <div className=' flex flex-col bg-black text-white w-full h-screen'>
         <div className='flex-1 overflow-hidden flex flex-row gap-2 justify-start align-top'>
-          <div className=' h-full w-1/4 min-w-[225px]'>
+          <div className={(!isMenu?'hidden': '') +  ' w-[60%] sm:block h-full sm:w-1/4 min-w-[225px]'}>
             <SideBar />
           </div>
           <div className=' h-full flex-1 overflow-hidden'>

@@ -1,36 +1,45 @@
 import yashodaraImg from './yashodara.jpeg'
+import yashodaraSong from './yashodara.mp3'
+import heenaDunnuAdareeImg from './Heena_Dunnu_Adaree.jpeg'
+import heenaDunnuAdareeSong from './Heena_Dunnu_Adaree.mp3'
 
 const forYou = [
     {
         name:"Yashodara",
         author:"Gangadara",
         img:yashodaraImg,
+        song:yashodaraSong
+    },
+    {
+        name:"Heena Dunnu Adaree",
+        author:"Ramidu, Themiya Thejan",
+        img:heenaDunnuAdareeImg,
+        song:heenaDunnuAdareeSong
     },
     {
         name:"Yashodara",
         author:"Gangadara",
         img:yashodaraImg,
+        song:yashodaraSong
+    },
+    {
+        name:"Heena Dunnu Adaree",
+        author:"Ramidu, Themiya Thejan",
+        img:heenaDunnuAdareeImg,
+        song:heenaDunnuAdareeSong
     },
     {
         name:"Yashodara",
         author:"Gangadara",
         img:yashodaraImg,
+        song:yashodaraSong
     },
     {
-        name:"Yashodara",
-        author:"Gangadara",
-        img:yashodaraImg,
+        name:"Heena Dunnu Adaree",
+        author:"Ramidu, Themiya Thejan",
+        img:heenaDunnuAdareeImg,
+        song:heenaDunnuAdareeSong
     },
-    {
-        name:"Yashodara",
-        author:"Gangadara",
-        img:yashodaraImg,
-    },
-    {
-        name:"Yashodara",
-        author:"Gangadara",
-        img:yashodaraImg,
-    }
 ];
 
 const topMixes = [
