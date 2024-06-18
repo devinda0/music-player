@@ -12,6 +12,9 @@ export default function MiniPlayer() {
     const [startTime, setStartTime] = useState({minute:0,seconds:0});
     const [endTime, setEndTime] = useState({minute:0,seconds:0});
     const [isMute, setIsMute] = useState(false);
+    const songUrl = 'http://localhost:3005/api/audio/test/' + playerState.playingSong.url;
+    const imgUrl = 'http://localhost:3005/api/img/' + playerState.playingSong.image;
+
 
     const startChangeSound = (e) => {
         window.addEventListener('mousemove', changeSound);
@@ -47,12 +50,25 @@ export default function MiniPlayer() {
         let newWidth = e.clientX - slider.current.offsetLeft;
         newWidth = (newWidth < 0) ? 0 : ((newWidth > fullWidth) ? fullWidth : newWidth); 
         let newTime = audioRef.current.duration * (newWidth/fullWidth);
+        console.log(audioRef.current.seekable.end(0));
         audioRef.current.currentTime = newTime;
     }
 
+    const loadAudio = () => {
+        return (new Promise((resolve, reject) =>{
+            if(playerState.playingSong.url){
+                audioRef.current.load();
+                resolve(audioRef.current);
+            } else {
+                reject('There are no audio selected');
+            }
+    }))}
+
     const playAudio = () => {
         if(!playerState.playing){
-            audioRef.current.play();
+            loadAudio().then((result) => {
+                result.play();
+            }).catch((err) => console.log(err));
             playerState.setPlaying(true);
         }
     }
@@ -102,16 +118,16 @@ export default function MiniPlayer() {
             audio.removeEventListener('timeupdate',updateStartTime);
             audio.removeEventListener('loadedmetadata',updateEndTime);
         };
-    },[playerState,audioRef]);
+    },[playerState,audioRef, songUrl]);
 
   return (
     <div className='w-full h-full bg-gray-900 flex flex-row justify-between items-center px-4 sm:px-2'>
         <div className='flex flex-row items-center gap-5'>
-            <img className='h-[60px] w-[60px] rounded-md' src={playerState.playingSong.img} alt='playing song' />
+            <img className='h-[60px] w-[60px] rounded-md' src={imgUrl} alt='playing song' />
             <div className=' min-w-[200px] flex flex-row items-center gap-5'>
                 <div>
-                    <h1 className=' text-sm text-gray-300 font-extralight'>{playerState.playingSong.name}</h1>
-                    <h2 className=' text-sm text-gray-500 font-extralight'>{playerState.playingSong.author}</h2>
+                    <h1 className=' text-sm text-gray-300 font-extralight'>{playerState.playingSong.title}</h1>
+                    <h2 className=' text-sm text-gray-500 font-extralight'>{playerState.playingSong.authors}</h2>
                 </div>
                 <button className=''>
                     add
@@ -136,7 +152,7 @@ export default function MiniPlayer() {
                         <path className=' fill-gray-800' d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713z"></path>
                     </svg>
                 </button>
-                <button className=' hidden sm:block'>
+                <button className=' hidden sm:block' onClick={(e) => {audioRef.current.currentTime = 100;}}>
                     <svg className='w-4 h-4' aria-hidden="true">
                         <path className=' fill-white' d="M12.7 1a.7.7 0 0 0-.7.7v5.15L2.05 1.107A.7.7 0 0 0 1 1.712v12.575a.7.7 0 0 0 1.05.607L12 9.149V14.3a.7.7 0 0 0 .7.7h1.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-1.6z"></path>
                     </svg>
@@ -181,7 +197,7 @@ export default function MiniPlayer() {
             </button>
         </div>
         
-        <audio ref={audioRef} src={playerState.playingSong.song} typeof='audio/mp3' />
+        <audio ref={audioRef} preload='auto' src={songUrl} typeof='audio/mp3' />
     </div>
   )
 }

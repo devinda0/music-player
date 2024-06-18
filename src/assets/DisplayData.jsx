@@ -1,6 +1,6 @@
 import yashodaraImg from './yashodara.jpeg'
 import yashodaraSong from './yashodara.mp3'
-import heenaDunnuAdareeImg from './Heena_Dunnu_Adaree.jpeg'
+// import heenaDunnuAdareeImg from './Heena_Dunnu_Adaree.jpeg'
 import heenaDunnuAdareeSong from './Heena_Dunnu_Adaree.mp3'
 
 const forYou = [
@@ -13,7 +13,7 @@ const forYou = [
     {
         name:"Heena Dunnu Adaree",
         author:"Ramidu, Themiya Thejan",
-        img:heenaDunnuAdareeImg,
+        img:"http://localhost:3005/api",
         song:heenaDunnuAdareeSong
     },
     {
@@ -25,7 +25,7 @@ const forYou = [
     {
         name:"Heena Dunnu Adaree",
         author:"Ramidu, Themiya Thejan",
-        img:heenaDunnuAdareeImg,
+        img:"http://localhost:3005/api",
         song:heenaDunnuAdareeSong
     },
     {
@@ -37,7 +37,7 @@ const forYou = [
     {
         name:"Heena Dunnu Adaree",
         author:"Ramidu, Themiya Thejan",
-        img:heenaDunnuAdareeImg,
+        img:"http://localhost:3005/api",
         song:heenaDunnuAdareeSong
     },
 ];

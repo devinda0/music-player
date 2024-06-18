@@ -5,6 +5,11 @@ import App from './App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Display from './components/Display';
 import Search from './components/Search';
+import DisplayMusic from './components/DisplayMusic';
+import DisplayAll from './components/DisplayAll';
+import DisplayData from './assets/DisplayData';
+
+const displayData = DisplayData.data;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +17,10 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App />}>
-          <Route index element={<Display />} />
+          <Route path='/' element={<Display />} >
+            <Route path='/' index element={<DisplayAll displayData={displayData} />} />
+            <Route path='music' element={<DisplayMusic />} />
+          </Route>
           <Route path='search' element={<Search />} />
         </Route>
       </Routes>

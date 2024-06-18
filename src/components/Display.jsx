@@ -1,30 +1,6 @@
 import React, { useContext } from 'react'
-import DisplayCard from './DisplayCard'
-import DisplayData from '../assets/DisplayData'
 import PlayerContext from './PlayerContext';
-
-const displayData = DisplayData.data;
-
-const DisplaySection = ({displayData})=> {
-  return (
-    <>
-      {displayData.map((value, index) =>{
-        return (
-        <section key={index} className=' w-full flex flex-col '>
-          <div className=' ml-2 text-lg text-gray-200 font-bold'>{value.name}</div>
-          <div className='w-full flex flex-row overflow-auto no-scrollbar'>
-            {
-              (value.items).map((value2,index2) => 
-                  <DisplayCard key={index2} song={value2} />
-              )
-            }
-          </div>
-        </section>
-        )
-      })}
-    </>
-  )
-}
+import { Outlet, Link } from 'react-router-dom';
 
 export default function Display() {
   const PlayerState = useContext(PlayerContext);
@@ -51,11 +27,17 @@ export default function Display() {
         </nav>
 
         <menu className=' w-full  shrink-0 flex flex-row gap-3 overflow-auto'>
-          <button className='rounded-2xl py-1 px-3 text-md text-gray-900 bg-opacity-100 bg-white'>All</button>
-          <button className='rounded-2xl py-1 px-3 text-md text-white bg-opacity-20 bg-white'>Music</button>
+          <Link to={'/'} >
+            <button className='rounded-2xl py-1 px-3 text-md text-gray-900 bg-opacity-100 bg-white'>All</button>
+          </Link>
+          <Link to={'music'}>
+            <button className='rounded-2xl py-1 px-3 text-md text-white bg-opacity-20 bg-white'>Music</button>
+          </Link>
         </menu>
+
+        <Outlet />
         
-        <DisplaySection displayData={displayData} />
+        {/* <DisplaySection displayData={displayData} /> */}
 
       </div>
     </div>
