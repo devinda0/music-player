@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import PlayerContext from './PlayerContext';
 
+const API = process.env.REACT_APP_API;
 
 export default function MiniPlayer() {
     const slider = useRef(null);
@@ -12,8 +13,8 @@ export default function MiniPlayer() {
     const [startTime, setStartTime] = useState({minute:0,seconds:0});
     const [endTime, setEndTime] = useState({minute:0,seconds:0});
     const [isMute, setIsMute] = useState(false);
-    const songUrl = 'http://localhost:3005/api/audio/test/' + playerState.playingSong.url;
-    const imgUrl = 'http://localhost:3005/api/img/' + playerState.playingSong.image;
+    const songUrl = API + 'audio/test/' + playerState.playingSong.url;
+    const imgUrl = API + 'img/' + playerState.playingSong.image;
 
 
     const startChangeSound = (e) => {

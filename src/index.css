@@ -13,4 +13,26 @@
     scrollbar-width: none;
   }
 
+  .form {
+    @apply w-full flex flex-col gap-3 mt-7
+  }
+
+  .form-label {
+    @apply text-white capitalize text-lg px-1;
+  }
+
+  .form-input {
+    @apply text-black h-9 my-1 w-full rounded-md px-1 text-base;
+  }
+
+  .form-section {
+    @apply w-full flex flex-row flex-wrap justify-between items-center;
+  }
+
+  .form-btn {
+    @apply bg-gray-600 font-medium text-lg w-full h-9 rounded-md mt-4
+  }
+
+  
+
 }
