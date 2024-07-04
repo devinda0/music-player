@@ -122,7 +122,7 @@ export default function MiniPlayer() {
     },[playerState,audioRef, songUrl]);
 
   return (
-    <div className='w-full h-full bg-gray-900 flex flex-row justify-between items-center px-4 sm:px-2'>
+    <div className='w-full h-full bg-gray-900 flex flex-row justify-between items-center pl-4 pr-4 sm:pl-2 sm:pr-4'>
         <div className='flex flex-row items-center gap-5'>
             <img className='h-[60px] w-[60px] rounded-md' src={imgUrl} alt='playing song' />
             <div className=' min-w-[200px] flex flex-row items-center gap-5'>
@@ -130,9 +130,6 @@ export default function MiniPlayer() {
                     <h1 className=' text-sm text-gray-300 font-extralight'>{playerState.playingSong.title}</h1>
                     <h2 className=' text-sm text-gray-500 font-extralight'>{playerState.playingSong.authors}</h2>
                 </div>
-                <button className=''>
-                    add
-                </button>
             </div>
         </div>
 
@@ -191,11 +188,11 @@ export default function MiniPlayer() {
                 <div className='h-1 bg-gray-100' style={{'width': `${sound}px`}} ref={soundRef} ></div>
                 <div className='w-2 h-2 bg-gray-100 rounded-lg -ml-1 cursor-pointer' onMouseDown={startChangeSound}></div>
             </div>
-            <button>
+            {/* <button>
                 <svg className='w-4 h-4' aria-hidden="true">
                     <path className=' fill-white' d="M6.53 9.47a.75.75 0 0 1 0 1.06l-2.72 2.72h1.018a.75.75 0 0 1 0 1.5H1.25v-3.579a.75.75 0 0 1 1.5 0v1.018l2.72-2.72a.75.75 0 0 1 1.06 0zm2.94-2.94a.75.75 0 0 1 0-1.06l2.72-2.72h-1.018a.75.75 0 1 1 0-1.5h3.578v3.579a.75.75 0 0 1-1.5 0V3.81l-2.72 2.72a.75.75 0 0 1-1.06 0z"></path>
                 </svg>
-            </button>
+            </button> */}
         </div>
         
         <audio ref={audioRef} preload='auto' src={songUrl} typeof='audio/mp3' />

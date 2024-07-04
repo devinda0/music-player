@@ -3,7 +3,6 @@ import App from './App';
 import { BrowserRouter, Route, Routes, Redirect, Navigate } from 'react-router-dom';
 import Display from './components/Display';
 import Search from './components/Search';
-import DisplayData from './assets/DisplayData';
 import DisplayMusic from './components/DisplayMusic';
 import DisplayAll from './components/DisplayAll';
 import LoginSignup from './components/LoginSignup';
@@ -46,25 +45,25 @@ export default function AppRouter() {
                 {
                     (validUser ? (
                         <>
-                        <Route path='/' element={<App userToken={userToken} />}>
-                            <Route path='/' element={<Display userToken={userToken} setUserToken={setUserToken} />} >
-                                <Route path='/' element={<Home />}>
-                                    <Route path='/' index element={<DisplayAll />} />
-                                    <Route path='music' element={<DisplayMusic />} />
+                            <Route path='/' element={<App userToken={userToken} />}>
+                                <Route path='/' element={<Display userToken={userToken} setUserToken={setUserToken} />} >
+                                    <Route path='/' element={<Home />}>
+                                        <Route path='/' index element={<DisplayAll />} />
+                                        <Route path='music' element={<DisplayMusic />} />
+                                    </Route>
+                                    <Route path='search' element={<Search />} />
+                                    <Route path='playlist/:id' element={<Playlist />} />
                                 </Route>
-                                <Route path='playlist/:id' element={<Playlist />} />
                             </Route>
-                            <Route path='search' element={<Search />} />
-                        </Route>
-                        <Route path='*' element={<Navigate to={'/'} replace/>} />
+                            <Route path='*' element={<Navigate to={'/'} replace/>} />
                         </>
                     ) : (
                         <>
-                        <Route path='/' element={<LoginSignup />}>
-                            <Route path='/' index element={<Login setUserToken={setUserToken} />} />
-                            <Route path='signup' element={<Signup setUserToken={setUserToken} />} />
-                        </Route>
-                        <Route path='*' element={<Navigate to={'/'} replace/>} />
+                            <Route path='/' element={<LoginSignup />} >
+                                <Route path='/' index element={<Login setUserToken={setUserToken} />} />
+                                <Route path='signup' element={<Signup setUserToken={setUserToken} />} />
+                            </Route>
+                            <Route path='*' element={<Navigate to={'/'} replace/>} />
                         </>
                     ))
                 }

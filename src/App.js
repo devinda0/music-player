@@ -8,6 +8,34 @@ import UserDetails from './components/UserDetails'
 
 const API = process.env.REACT_APP_API;
 
+const PlaylistLine = ({playlist, songId}) => {
+  const imgUrl = API + 'img/' + playlist.image;
+  const [songAdded, setSongAdded] = useState(!!playlist.hasSong);
+
+  const handleSongAdd = (e) => {
+    axios.post(`${API}user/playlists/addsong`,{
+      songId,
+      playlistId : playlist.playlistId,
+      isAddSong : !songAdded
+    }).then((res) => {
+      setSongAdded(res.data.hasSong);
+    }).catch((err) => console.log(err))
+  }
+
+  return (
+    <div className='w-full h-[60px] flex flex-row justify-between items-center gap-2 hover:bg-gray-700 px-2 py-1 rounded-md'>
+      <div>
+        <img className=' h-[50px] rounded-md' src={imgUrl} alt="" />
+      </div>
+      <div className=' flex-1'>
+          <h1 className=' text-gray-300'>{playlist.name}</h1>
+          <h2 className=' text-gray-500'>{playlist.description}</h2>
+      </div>
+      <input type='checkbox' checked={songAdded} onChange={handleSongAdd} />
+    </div>
+  )
+}
+
 export default function App({userToken, setUserToken}) {
   const [playingSong,setPlayingSong] = useState({});
   const [playing, setPlaying] = useState(false);
@@ -15,6 +43,9 @@ export default function App({userToken, setUserToken}) {
   const [isMenu, setIsMenu] = useState(false);
   const [newPlaylist, setNewPlaylist] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState('');
+  const [isAddingSong, setIsAddingSong] = useState(false);
+  const [addingSongId,setAddingSongId] = useState(2);
+  const [playlistsToAdd, setPlaylistsToAdd] = useState([]);
 
   const handleFormCancel = (e) => {
     setNewPlaylistName('');
@@ -43,9 +74,25 @@ export default function App({userToken, setUserToken}) {
       .catch((err) => console.log(err));
   },[])
 
+  useEffect(() => {
+    if(addingSongId){
+      axios.post(`${API}user/playlists/exists`,{songId : addingSongId},{
+        headers : {
+          Authorization : `Bearer ${userToken}`
+        }
+      }).then((res) => {
+        setPlaylistsToAdd(res.data.playlists);
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+  },[addingSongId, isAddingSong])
+
   const userDetails = {
     userToken,
-    setUserToken
+    setUserToken,
+    setIsAddingSong,
+    setAddingSongId
   }
 
   const playerState = {
@@ -93,6 +140,25 @@ export default function App({userToken, setUserToken}) {
                 <div className='w-full h-full bg-gray-600 absolute opacity-50'></div>
               </div>
             </div>
+          }
+
+          { isAddingSong &&
+          <div className=' absolute w-full h-full'>
+            <div className='w-full h-full flex justify-center items-center relative px-7 md:px-0'>
+              <div className='w-full md:w-[50%] max-h-[80%] px-3 md:px-10 py-7 gap-7 flex flex-col justify-start items-center bg-gray-900 z-50 rounded-xl'>
+
+                <h1 className=' text-xl text-gray-100 font-bold'>Select playlists to add</h1>
+                <div className='w-full '>
+                  {
+                    playlistsToAdd.map((value, index) => <PlaylistLine songId={addingSongId} playlist={value} key={index} />)
+                  }
+                </div>
+                <button className=' w-[120px] h-[40px] rounded-2xl bg-green-400 text-gray-900 text-xl font-bold' onClick={(e) => setIsAddingSong(false)}>Done</button>
+
+              </div>
+              <div className='w-full h-full absolute bg-gray-600 z-20 opacity-[0.5]'></div>
+            </div>
+          </div>
           }
 
         </div>
